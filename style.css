@@ -1,6 +1,11 @@
-body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding-top: 50px; }
-.container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 350px; text-align: center; }
-input { width: 80%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
-button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+.container { background: white; padding: 30px; border-radius: 12px; width: 450px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
+.section { margin: 15px 0; }
+input[type="number"], input[type="file"] { padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+button { padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
 button:hover { background: #0056b3; }
-.result-box { margin-top: 20px; padding: 10px; border-top: 2px solid #eee; font-size: 1.2rem; }
+.dashboard { display: flex; justify-content: space-around; margin: 20px 0; background: #f8f9fa; padding: 15px; border-radius: 8px; }
+.stat-box .label { display: block; font-size: 12px; color: #666; }
+.stat-box .value { font-size: 24px; font-weight: bold; color: #007bff; }
+#pointsList { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 10px; }
+.point-tag { background: #e2e8f0; padding: 5px 10px; border-radius: 15px; font-size: 14px; }
