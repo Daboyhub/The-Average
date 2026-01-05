@@ -2,20 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Points Averager</title>
+    <title>Points Scanner</title>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Points Averager</h1>
-        <p>Enter your numbers separated by commas:</p>
-        <input type="text" id="pointsInput" placeholder="e.g. 85, 90, 78, 92">
-        <button onclick="calculateAverage()">Calculate</button>
-        
-        <div id="resultDisplay" class="result-box">
-            <p>Average: <span id="avgValue">-</span></p>
-            <p>Total Points: <span id="totalValue">-</span></p>
-        </div>
+        <h1>Point Average Scanner</h1>
+        <input type="file" id="upload" accept="image/*" multiple>
+        <div id="status">Upload a photo with numbers...</div>
+        <div id="results"></div>
     </div>
     <script src="script.js"></script>
 </body>
