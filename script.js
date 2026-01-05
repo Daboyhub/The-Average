@@ -1,39 +1,56 @@
+let allPoints = []; // The "Master List"
+
 const upload = document.getElementById('upload');
 const status = document.getElementById('status');
-const results = document.getElementById('results');
+const pointsList = document.getElementById('pointsList');
 
+// --- 1. SCAN PHOTO LOGIC ---
 upload.addEventListener('change', async (e) => {
     const files = Array.from(e.target.files);
-    results.innerHTML = ''; // Clear old results
-
     for (const file of files) {
-        status.innerText = `Scanning ${file.name}...`;
-        
-        // 1. Recognize text in the image
+        status.innerText = `Reading ${file.name}...`;
         const worker = await Tesseract.createWorker('eng');
         const { data: { text } } = await worker.recognize(file);
         await worker.terminate();
 
-        // 2. Extract numbers using Regex
-        const numbers = text.match(/\d+(\.\d+)?/g);
-
-        if (numbers) {
-            const points = numbers.map(Number);
-            const sum = points.reduce((a, b) => a + b, 0);
-            const average = (sum / points.length).toFixed(2);
-
-            // 3. Display the math result
-            const div = document.createElement('div');
-            div.className = 'result-card';
-            div.innerHTML = `
-                <strong>${file.name}</strong><br>
-                Found: ${points.join(', ')}<br>
-                <strong>Average: ${average}</strong>
-            `;
-            results.appendChild(div);
-        } else {
-            status.innerText = "No numbers found in " + file.name;
+        const foundNumbers = text.match(/\d+(\.\d+)?/g);
+        if (foundNumbers) {
+            foundNumbers.forEach(num => allPoints.push(Number(num)));
+            updateUI();
         }
     }
-    status.innerText = "Scanning complete.";
+    status.innerText = "Scan complete!";
 });
+
+// --- 2. MANUAL ADD LOGIC ---
+function addManualNumber() {
+    const input = document.getElementById('manualNumber');
+    const val = parseFloat(input.value);
+    
+    if (!isNaN(val)) {
+        allPoints.push(val);
+        input.value = ''; // Clear input
+        updateUI();
+        status.innerText = "Number added manually.";
+    }
+}
+
+// --- 3. RECALCULATE & DISPLAY ---
+function updateUI() {
+    // Calculate Average
+    const sum = allPoints.reduce((a, b) => a + b, 0);
+    const avg = allPoints.length > 0 ? (sum / allPoints.length).toFixed(2) : 0;
+
+    // Update Dashboard
+    document.getElementById('avgDisplay').innerText = avg;
+    document.getElementById('countDisplay').innerText = allPoints.length;
+
+    // Show list of all numbers
+    pointsList.innerHTML = allPoints.map(p => `<span class="point-tag">${p}</span>`).join('');
+}
+
+function clearAll() {
+    allPoints = [];
+    updateUI();
+    status.innerText = "Cleared.";
+}
