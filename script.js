@@ -1,56 +1,23 @@
-const upload = document.getElementById('upload');
-const results = document.getElementById('results');
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+function calculateAverage() {
+    const input = document.getElementById('pointsInput').value;
+    
+    // 1. Split the string by commas and convert to numbers
+    const pointsArray = input.split(',')
+                             .map(num => parseFloat(num.trim()))
+                             .filter(num => !isNaN(num)); // Remove non-numbers
 
-upload.addEventListener('change', (e) => {
-    results.innerHTML = ''; // Clear previous results
-    const files = Array.from(e.target.files);
-
-    files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const img = new Image();
-            img.onload = () => {
-                const avgColor = getAverageColor(img);
-                displayResult(file.name, avgColor);
-            };
-            img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    });
-});
-
-function getAverageColor(img) {
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0);
-
-    // Get pixel data: [r, g, b, a, r, g, b, a...]
-    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-    let r = 0, g = 0, b = 0;
-
-    for (let i = 0; i < data.length; i += 4) {
-        r += data[i];
-        g += data[i + 1];
-        b += data[i + 2];
+    if (pointsArray.length === 0) {
+        alert("Please enter some valid numbers!");
+        return;
     }
 
-    const count = data.length / 4;
-    return {
-        r: Math.floor(r / count),
-        g: Math.floor(g / count),
-        b: Math.floor(b / count)
-    };
-}
+    // 2. Sum up all the points
+    const sum = pointsArray.reduce((acc, current) => acc + current, 0);
 
-function displayResult(name, color) {
-    const rgb = `rgb(${color.r}, ${color.g}, ${color.b})`;
-    const div = document.createElement('div');
-    div.className = 'result-card';
-    div.innerHTML = `
-        <span><strong>${name}</strong>: ${rgb}</span>
-        <div class="swatch" style="background: ${rgb}"></div>
-    `;
-    results.appendChild(div);
+    // 3. Calculate the average
+    const average = sum / pointsArray.length;
+
+    // 4. Update the screen
+    document.getElementById('avgValue').innerText = average.toFixed(2);
+    document.getElementById('totalValue').innerText = pointsArray.length;
 }
