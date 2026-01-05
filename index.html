@@ -2,17 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Points Scanner</title>
+    <title>Points Calculator & Scanner</title>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Point Average Scanner</h1>
-        <input type="file" id="upload" accept="image/*" multiple>
-        <div id="status">Upload a photo with numbers...</div>
-        <div id="results"></div>
+        <h1>Points Master</h1>
+        
+        <div class="section">
+            <h3>Step 1: Scan Photo (Optional)</h3>
+            <input type="file" id="upload" accept="image/*" multiple>
+        </div>
+
+        <hr>
+
+        <div class="section">
+            <h3>Step 2: Add Own Numbers</h3>
+            <input type="number" id="manualNumber" placeholder="Enter a number">
+            <button onclick="addManualNumber()">Add Number</button>
+        </div>
+
+        <div id="status">Ready...</div>
+
+        <div class="dashboard">
+            <div class="stat-box">
+                <span class="label">Average</span>
+                <span id="avgDisplay" class="value">0</span>
+            </div>
+            <div class="stat-box">
+                <span class="label">Count</span>
+                <span id="countDisplay" class="value">0</span>
+            </div>
+        </div>
+
+        <h3>Active Points List:</h3>
+        <div id="pointsList"></div>
+        <button onclick="clearAll()" style="background:#ff4444; margin-top:20px;">Clear Everything</button>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
