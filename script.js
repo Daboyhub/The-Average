@@ -1,23 +1,39 @@
-function calculateAverage() {
-    const input = document.getElementById('pointsInput').value;
-    
-    // 1. Split the string by commas and convert to numbers
-    const pointsArray = input.split(',')
-                             .map(num => parseFloat(num.trim()))
-                             .filter(num => !isNaN(num)); // Remove non-numbers
+const upload = document.getElementById('upload');
+const status = document.getElementById('status');
+const results = document.getElementById('results');
 
-    if (pointsArray.length === 0) {
-        alert("Please enter some valid numbers!");
-        return;
+upload.addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files);
+    results.innerHTML = ''; // Clear old results
+
+    for (const file of files) {
+        status.innerText = `Scanning ${file.name}...`;
+        
+        // 1. Recognize text in the image
+        const worker = await Tesseract.createWorker('eng');
+        const { data: { text } } = await worker.recognize(file);
+        await worker.terminate();
+
+        // 2. Extract numbers using Regex
+        const numbers = text.match(/\d+(\.\d+)?/g);
+
+        if (numbers) {
+            const points = numbers.map(Number);
+            const sum = points.reduce((a, b) => a + b, 0);
+            const average = (sum / points.length).toFixed(2);
+
+            // 3. Display the math result
+            const div = document.createElement('div');
+            div.className = 'result-card';
+            div.innerHTML = `
+                <strong>${file.name}</strong><br>
+                Found: ${points.join(', ')}<br>
+                <strong>Average: ${average}</strong>
+            `;
+            results.appendChild(div);
+        } else {
+            status.innerText = "No numbers found in " + file.name;
+        }
     }
-
-    // 2. Sum up all the points
-    const sum = pointsArray.reduce((acc, current) => acc + current, 0);
-
-    // 3. Calculate the average
-    const average = sum / pointsArray.length;
-
-    // 4. Update the screen
-    document.getElementById('avgValue').innerText = average.toFixed(2);
-    document.getElementById('totalValue').innerText = pointsArray.length;
-}
+    status.innerText = "Scanning complete.";
+});
